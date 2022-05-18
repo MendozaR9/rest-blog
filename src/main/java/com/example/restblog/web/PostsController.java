@@ -52,10 +52,12 @@ public class PostsController {
 
     @DeleteMapping("{id}")
     public void deletePost(@PathVariable long id){
+        Post postToRemove = null;
         for (Post postToDelete: getAll()) {
             if (Objects.equals(postToDelete.getId(),id))
+                postToDelete = postToRemove;
                 System.out.println(postToDelete+" will be deleted");
-            getAll().remove(postToDelete);
+
         }
     }
 }

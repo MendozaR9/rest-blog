@@ -4,6 +4,7 @@ import com.example.restblog.data.Post;
 import com.example.restblog.data.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -17,10 +18,8 @@ public class UserController {
     @GetMapping
     public ArrayList<User> getAll(){
         newUsers.clear();
-        newUsers.add(new User(1, "testUser", "user@gmail.com",
-                "password", new Date(1000, 7, 5), User.Role.USER));
-        newUsers.add(new User(2, "Duck", "duckman@gmail.com", "DuckMan",
-                new Date(2000,5,7), User.Role.ADMIN));
+        newUsers.add(new User(1, "testUser", "user@gmail.com", "password"));
+        newUsers.add(new User(2, "Duck", "duckman@gmail.com", "DuckMan") );
         return newUsers;
     }
 
@@ -28,6 +27,26 @@ public class UserController {
     public User getById(@PathVariable long id){
         for (User user: getAll()) {
             if (Objects.equals(user.getId(), id)){
+                return user;
+            }
+        }
+        return new User();
+    }
+
+    @GetMapping("/username")
+    public User getByUsername(@RequestParam String username){
+        for (User user: getAll()) {
+            if (Objects.equals(user.getUsername(), username)){
+                return user;
+            }
+        }
+        return new User();
+    }
+
+    @GetMapping("/email")
+    public User getByEmail(@RequestParam String email){
+        for (User user: getAll()) {
+            if (Objects.equals(user.getEmail(), email)){
                 return user;
             }
         }

@@ -1,27 +1,25 @@
 package com.example.restblog.data;
 
-import javax.management.relation.Role;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 public class User {
     private long id;
     private  String username;
     private String email;
     private String password;
-    private Date createdAt;
-    private Role role;
+    private LocalDate createdAt = LocalDate.now();
+    private Role role = Role.USER;
 
     public enum Role{USER, ADMIN}
 
     ;
 
-    public User(long id, String username, String email, String password, Date createdAt, Role role) {
+    public User(long id, String username, String email, String password ){
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.createdAt = createdAt;
-        this.role = role;
     }
 
     public User() {
@@ -59,11 +57,11 @@ public class User {
         this.password = password;
     }
 
-    public Date getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 

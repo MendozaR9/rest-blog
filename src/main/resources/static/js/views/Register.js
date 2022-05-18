@@ -24,15 +24,12 @@ export default function Register(props) {
 }
 export function RegisterEvent(){
     $(document).on('click', '#create-btn', function (){
-        let today = new Date()
+        let today = new Date();
         let user = {
             id: 3,
             username:$('#username').val(),
             email:$('#email').val(),
             password: $('#password').val(),
-            createdAt:null,
-            // createdAt: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(),
-            role: "USER"
         }
         console.log(user)
         let request = {
@@ -45,7 +42,8 @@ export function RegisterEvent(){
             .then((response) => {
                 console.log(response.status)
                 createView("/");
-            });
+
+            }).catch(error=>console.log(error));
     })
 
 
