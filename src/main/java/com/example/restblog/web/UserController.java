@@ -40,25 +40,28 @@ public class UserController {
     }
     
     @PutMapping("{id}")
-    public void  updateUser(@PathVariable long id, User user){
+    public void  updateUser(@PathVariable long id,  @RequestBody User user){
         for (User oldUser: getAll()) {
             if (Objects.equals(oldUser.getId(), id)){
                 System.out.println(oldUser);
                 user.setId(id);
                 oldUser.setUsername(user.getUsername());
                 oldUser.setEmail(user.getEmail());
+
                 System.out.println(user);
             }
         }
+
     }
 
     @DeleteMapping("{id}")
     public void deleteUser(@PathVariable long id){
-        for (User UserToDelete: getAll()) {
-            if (Objects.equals(UserToDelete.getId(),id))
-                System.out.println(UserToDelete+" will be deleted");
-            getAll().remove(UserToDelete);
-        }
+//        for (User UserToDelete: getAll()) {
+//            if (Objects.equals(UserToDelete.getId(),id))
+//                System.out.println(UserToDelete+" will be deleted");
+//            getAll().remove(UserToDelete);
+//        }
+        System.out.println("Deleting the  user with the id of "+ id);
     }
 
 }
