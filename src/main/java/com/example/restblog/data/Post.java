@@ -5,6 +5,8 @@ public class Post {
     private  String title;
     private String content;
 
+    private User user ;
+
     public Post(long id, String title, String content) {
         this.id = id;
         this.title = title;
@@ -12,6 +14,14 @@ public class Post {
     }
 
     public Post() {
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public long getId() {
@@ -44,6 +54,7 @@ public class Post {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", user=" + user +
                 '}';
     }
 }

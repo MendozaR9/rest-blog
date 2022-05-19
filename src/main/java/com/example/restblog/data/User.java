@@ -1,6 +1,7 @@
 package com.example.restblog.data;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 
 public class User {
@@ -10,6 +11,8 @@ public class User {
     private String password;
     private LocalDate createdAt = LocalDate.now();
     private Role role = Role.USER;
+
+    private Collection<Post> posts;
 
     public enum Role{USER, ADMIN}
 
@@ -23,6 +26,14 @@ public class User {
     }
 
     public User() {
+    }
+
+    public Collection<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Collection<Post> posts) {
+        this.posts = posts;
     }
 
     public long getId() {
@@ -82,6 +93,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", createdAt=" + createdAt +
                 ", role=" + role +
+                ", posts=" + posts +
                 '}';
     }
 }
