@@ -17,9 +17,10 @@ public class UserController {
 
     @GetMapping
     public ArrayList<User> getAll(){
-        newUsers.clear();
-        newUsers.add(new User(1, "testUser", "user@gmail.com", "password"));
-        newUsers.add(new User(2, "Duck", "duckman@gmail.com", "DuckMan") );
+        if (newUsers.size() <= 3) {
+            newUsers.add(new User(1, "testUser", "user@gmail.com", "password"));
+            newUsers.add(new User(2, "Duck", "duckman@gmail.com", "DuckMan"));
+        }
         return newUsers;
     }
 
@@ -54,12 +55,13 @@ public class UserController {
     }
 
     @PostMapping
-    public void createUser(@RequestBody User user){
+    public void create(@RequestBody User user){
+        newUsers.add(user);
         System.out.println(user);
     }
     
     @PutMapping("{id}")
-    public void  updateUser(@PathVariable long id,  @RequestBody User user){
+    public void  update(@PathVariable long id,  @RequestBody User user){
         for (User oldUser: getAll()) {
             if (Objects.equals(oldUser.getId(), id)){
                 System.out.println(oldUser);
