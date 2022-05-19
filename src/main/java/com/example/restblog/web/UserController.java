@@ -1,12 +1,9 @@
 package com.example.restblog.web;
-
-import com.example.restblog.data.Post;
 import com.example.restblog.data.User;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Objects;
 
 @CrossOrigin
@@ -68,12 +65,18 @@ public class UserController {
                 user.setId(id);
                 oldUser.setUsername(user.getUsername());
                 oldUser.setEmail(user.getEmail());
-
                 System.out.println(user);
             }
         }
-
     }
+
+    @PutMapping("{id}/updatePassword")
+    public void updatePassword(   @PathVariable Long id, @RequestParam(required = false) String oldPassword, @Valid @Size(min = 3) @RequestParam String newPassword){
+            User userToUpdate = getById(id);
+            userToUpdate.setPassword(newPassword);
+        System.out.println(userToUpdate.getPassword());
+    }
+
 
     @DeleteMapping("{id}")
     public void deleteUser(@PathVariable long id){

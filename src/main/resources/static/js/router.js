@@ -6,7 +6,7 @@ import Loading from "./views/Loading.js";
 import Login from "./views/Login.js";
 import LoginEvent from "./auth.js";
 import Register, {RegisterEvent} from "./views/Register.js";
-import User from "./views/User.js";
+import User, {UserEvent} from "./views/User.js";
 
 /**
  * Returns the route object for a specific route based on the given URI
@@ -47,10 +47,11 @@ export default function router(URI) {
         '/user':{
             returnView: User,
             state: {
-                user:'/api/users'
+                user:'/api/users/1'
             },
             uri:'/user',
             title:'user',
+            viewEvent: UserEvent
         },
         '/about': {
             returnView: About,
