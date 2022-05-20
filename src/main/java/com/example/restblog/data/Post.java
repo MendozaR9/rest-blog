@@ -1,10 +1,12 @@
 package com.example.restblog.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 public class Post {
     private long id;
     private  String title;
     private String content;
-
+@JsonIgnoreProperties("posts")
     private User user ;
 
     public Post(long id, String title, String content) {

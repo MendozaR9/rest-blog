@@ -1,7 +1,9 @@
 package com.example.restblog.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.List;
 
 
 public class User {
@@ -12,11 +14,12 @@ public class User {
     private LocalDate createdAt = LocalDate.now();
     private Role role = Role.USER;
 
-    private Collection<Post> posts;
+    @JsonIgnoreProperties("user")
+    private List<Post> posts;
 
     public enum Role{USER, ADMIN}
 
-    ;
+
 
     public User(long id, String username, String email, String password ){
         this.id = id;
@@ -28,11 +31,11 @@ public class User {
     public User() {
     }
 
-    public Collection<Post> getPosts() {
+    public List<Post> getPosts() {
         return posts;
     }
 
-    public void setPosts(Collection<Post> posts) {
+    public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
 

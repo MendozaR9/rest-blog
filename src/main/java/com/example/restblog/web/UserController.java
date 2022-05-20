@@ -1,65 +1,68 @@
 package com.example.restblog.web;
 import com.example.restblog.data.User;
+import com.example.restblog.services.UserService;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/users", headers = "Accept=application/json")
 public class UserController {
-    ArrayList<User> newUsers = new ArrayList<>();
+    private final UserService userServices;
+
+    public UserController(UserService userServices) {
+        this.userServices = userServices;
+    }
+
 
     @GetMapping
-    public ArrayList<User> getAll(){
-        if (newUsers.size() <= 3) {
-            newUsers.add(new User(1, "testUser", "user@gmail.com", "password"));
-            newUsers.add(new User(2, "Duck", "duckman@gmail.com", "DuckMan"));
-        }
-        return newUsers;
+    public List<User> getAll(){
+        return userServices.getUserList();
     }
 
     @GetMapping("{id}")
     public User getById(@PathVariable long id){
-        for (User user: getAll()) {
+        for (User user: userServices.getUserList()) {
             if (Objects.equals(user.getId(), id)){
                 return user;
             }
         }
-        return new User();
+        return null;
     }
 
     @GetMapping("/username")
     public User getByUsername(@RequestParam String username){
-        for (User user: getAll()) {
+        for (User user: userServices.getUserList()) {
             if (Objects.equals(user.getUsername(), username)){
                 return user;
             }
         }
-        return new User();
+        return null;
     }
 
     @GetMapping("/email")
     public User getByEmail(@RequestParam String email){
-        for (User user: getAll()) {
+        for (User user: userServices.getUserList()) {
             if (Objects.equals(user.getEmail(), email)){
                 return user;
             }
         }
-        return new User();
+        return null;
     }
 
     @PostMapping
     public void create(@RequestBody User user){
-        newUsers.add(user);
-        System.out.println(user);
+    userServices.getUserList().add(user);
+    System.out.println(user);
     }
     
     @PutMapping("{id}")
     public void  update(@PathVariable long id,  @RequestBody User user){
-        for (User oldUser: getAll()) {
+        for (User oldUser: userServices.getUserList()) {
             if (Objects.equals(oldUser.getId(), id)){
                 System.out.println(oldUser);
                 user.setId(id);
@@ -80,11 +83,6 @@ public class UserController {
 
     @DeleteMapping("{id}")
     public void deleteUser(@PathVariable long id){
-//        for (User UserToDelete: getAll()) {
-//            if (Objects.equals(UserToDelete.getId(),id))
-//                System.out.println(UserToDelete+" will be deleted");
-//            getAll().remove(UserToDelete);
-//        }
         System.out.println("Deleting the  user with the id of "+ id);
     }
 

@@ -1,9 +1,9 @@
 package com.example.restblog.web;
 
 import com.example.restblog.data.Post;
+import com.example.restblog.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;;
 
@@ -12,24 +12,26 @@ import java.util.Objects;;
 @RequestMapping(value = "/api/posts", headers = "Accept=application/json")
 public class PostsController {
 
-    ArrayList<Post> newPosts = new ArrayList<>();
+    private final UserService userServices;
+
+    public PostsController(UserService userServices) {
+        this.userServices = userServices;
+    }
 
     @GetMapping
-    public ArrayList<Post> getAll() {
-        newPosts.clear();
-        newPosts.add( new Post(1L, "Dog pics", " this is a picture of my dog"));
-        newPosts.add(new Post(2L, "Dinner", "Dinner "));
-        return newPosts;
+    public List<Post> getAll() {
+        return userServices.getPostList();
     }
 
     @GetMapping("{id}")
     public Post getById(@PathVariable long id){
-        for (Post post: getAll()) {
+
+        for (Post post: userServices.getPostList()) {
             if (Objects.equals(post.getId(), id)){
                 return post;
             }
         }
-        return new Post();
+        return null;
     }
 
     @PostMapping
@@ -39,7 +41,7 @@ public class PostsController {
 
     @PutMapping("{id}")
     public void updatePost(@RequestBody Post post , @PathVariable long id){
-        for (Post oldPost: getAll()) {
+        for (Post oldPost: userServices.getPostList()) {
             if (Objects.equals(oldPost.getId(), id)){
                 System.out.println(oldPost);
                 post.setId(id);
