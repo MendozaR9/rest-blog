@@ -21,6 +21,11 @@ public class User {
     public enum Role{USER, ADMIN}
 
 
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
     public User(long id, String username, String email, String password ){
         this.id = id;

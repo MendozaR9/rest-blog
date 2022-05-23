@@ -1,22 +1,45 @@
 const url ="http://localhost:8080/api/posts"
+let requestMethod = "POST";
+let postId = "";
+ const fakeUser = {
+     username: "testUser",
+     email: "test@user.com",
+     password: "password"
+ }
 export default function PostIndex(props) {
+    //language=HTML
     return `
-        <header>
-            <h1>Posts Page</h1>
-        </header>
-        <main>
-            <div id="posts-container">
-                ${props.posts.map(post => `<h3>${post.title}</h3>
-                <p>${post.content}</p>     
-<button class="delete-button" type="button" data-id="${post.id}">Delete</button>`).join('')}   
-            </div>
-            <input type="text" id="id-post" placeholder="give id"><br>
-            <input type="text" id="title-post" placeholder="title" ><br>
-            <textarea id="content-post" placeholder="Enter your content here"></textarea><br>
-            <button id="post-btn" type="button">Post</button><br>
-            <button id ="edit-btn" type="button">Edit</button>
-            <button id="delete-btn" type="button">Delete</button>
-        </main>
+      <header>
+        <h1>Posts Page</h1>
+      </header>
+      <main>
+        <div id="posts-container">
+          ${props.posts.map(post =>
+        // TODO: make sure you wrap each post in its own container with a css id attribute linked to the post id
+        `<div class="post-container" id = "post-${post.id}">
+                  <h3 id="title-${post.id}">${post.title}</h3>
+                  <p id="content-${post.id}">${post.content}</p>
+                  <p class="post-author">${post.user.username}</p>
+                  <button type="submit" class="btn btn-primary edit-button" data-id="${post.id}">Edit</button>
+                  <button type="submit" class="btn btn-danger delete-button" data-id="${post.id}">Delete</button>
+              </div>
+            `).join('')}
+        </div>
+        <div id="add-post-form">
+          <div>
+            <input type="text" class="form-control" id="add-post-title" placeholder="Add Post Title">
+          </div>
+          <br>
+          <div>
+            <textarea class="form-control" rows="4" id="add-post-content"
+                placeholder="Add Post Content"></textarea>
+          </div>
+          <br>
+          <div>
+            <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
+          </div>
+        </div>
+      </main>
     `;
 }
 // PostsEvent();
@@ -27,68 +50,90 @@ deletePostBtn()
 }
 
 function submitPost(){
-    $(document).on('click', '#post-btn', function (){
-        let newPost = {
-            id: $("#id-post").val(),
-            title: $("#title-post").val(),
-            content: $("#content-post").val()
+    $(document).on('click', '#submit-btn', function (e) {
+        e.preventDefault();
+        const newPost = {
+            title: $("#add-post-title").val(),
+            content: $("#add-post-content").val()
         }
-        sendPost(newPost)
-    })
-}
 
-function editPost(){
-    $(document).on('click', '#edit-btn', function (){
-        let selId =$("#id-post").val()
-        let newPost = {
-            id: selId ,
-            title: $("#title-post").val(),
-            content: $("#content-post").val()
+        const request = {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newPost)
         }
-        changePost(newPost, selId)
-    })
-}
 
-function sendPost(post){
-    fetch(url, {
-        method: "POST",
-        body: JSON.stringify(post),
-        headers: {"Content-type": "application/json; charset=UTF-8"},
-    })
-        .then(json => console.log(json))
-        .then(res => console.log(post))
-        .catch(err => {
-            console.log('you have error plz cry', err)
-        });
-}
+        let requestUrl = "";
 
-function changePost(post, id) {
-    fetch(`${url}/`+id, {
-        method: "PUT",
-        body: JSON.stringify(post),
-        headers: {"Content-type": "application/json; charset=UTF-8"},
+        // **** HERE ****
+        const fakeUsername = 'testUser'; // TODO: replace once we implement login
+        if (fakeUsername) {
+            requestUrl = `${url}/${fakeUsername}`; // **** MAKE SURE YOU HAVE AN @PostMapping which matches /api/posts/{username}
+        } else {
+            requestUrl = `${url}`;
+        }
+
+        fetch(requestUrl, request) // TODO: if the post was successful, no need to parse out the response.. just have a catch and finally block
+            .catch(error => {
+                console.log(error);
+            })
+            .finally(() => {
+                postId = "";
+                 requestMethod = "POST";
+            })
+
     })
-        .then(json => console.log(json))
-        .then(res => console.log(post))
-        .catch(err => {
-            console.log('you have error plz cry', err)
-        });
+
+    }
+
+function editPost() {
+    $(document).on('click', '.edit-button', function (e) {
+         postId = $(this).data("id");
+
+        const editPostTitle = $(`#title-${postId}`).text();
+        const editPostContent = $(`#content-${postId}`).text();
+        let editedPost ={
+            id: postId,
+            title: editPostTitle,
+            content: editPostContent,
+            user: fakeUser
+        }
+        console.log(editedPost)
+        const request = {
+            method: "PUT",
+            body: JSON.stringify(editedPost),
+            headers: {"Content-type": "application/json; charset=UTF-8"},
+        }
+
+        fetch(`${url}/` + postId, request)
+            .then(json => console.log(json))
+            .catch(err => {
+                console.log('you have error plz cry', err)
+            });
+    })
 }
 
 function deletePostBtn(){
-    $(document).on("click", '.btn',function (){
-        console.log($(this).data("id"))
-      let id = $(this).data("id")
-        console.log("hello")
-        deletePost(id)
+    $(document).on('click', '.delete-button', function (e) {
+        e.preventDefault();
+
+        const id = $(this).data("id");
+
+        const request = {
+            method: "DELETE"
+        };
+
+        fetch(`${url}/${id}`, request)
+            .then(res => {
+                console.log(res.status);
+                // TODO: once we get a successful response, remove the post element from the DOM
+                $(`#post-${id}`).remove();
+            })
+            .catch(error => {
+                console.log(error);
+            });
     })
 }
 
-function deletePost(id){
-    fetch(`${url}/`+id, {
-        method: 'DELETE',
-        headers: {"Content-type": "application/json; charset=UTF-8"},
-    })
-        .then(res => res.json()) // or res.json()
-        .catch(error => console.log("error", error))
-}

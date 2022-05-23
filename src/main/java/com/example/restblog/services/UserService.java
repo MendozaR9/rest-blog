@@ -71,8 +71,9 @@ public class UserService {
 
     private List<Post> setPostList(){
         List<Post> postList = new ArrayList<>();
-        postList.add( new Post(1L, "Dog pics", " this is a picture of my dog"));
-        postList.add(new Post(2L, "Dinner", "Dinner "));
+        User user = new User(1, "DUCK", "user@gmail.com", "password");
+        postList.add( new Post(1L, "Dog pics", " this is a picture of my dog", user));
+        postList.add(new Post(2L, "Dinner", "Dinner ", user));
         return postList;
     }
 }

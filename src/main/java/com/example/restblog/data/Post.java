@@ -9,11 +9,13 @@ public class Post {
 @JsonIgnoreProperties("posts")
     private User user ;
 
-    public Post(long id, String title, String content) {
+    public Post(long id, String title, String content , User user) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.user = user;
     }
+
 
     public Post() {
     }
