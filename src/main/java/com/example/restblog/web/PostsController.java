@@ -4,6 +4,8 @@ import com.example.restblog.data.Post;
 import com.example.restblog.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;;
 
@@ -24,10 +26,10 @@ public class PostsController {
     }
 
     @GetMapping("{id}")
-    public Post getById(@PathVariable long id){
+    public Post getById(@PathVariable long id) {
 
-        for (Post post: userServices.getPostList()) {
-            if (Objects.equals(post.getId(), id)){
+        for (Post post : userServices.getPostList()) {
+            if (Objects.equals(post.getId(), id)) {
                 return post;
             }
         }
@@ -35,14 +37,14 @@ public class PostsController {
     }
 
     @PostMapping
-    public void createPost(@RequestBody Post newPost){
+    public void createPost(@RequestBody Post newPost) {
         System.out.println(newPost);
     }
 
     @PutMapping("{id}")
-    public void updatePost(@RequestBody Post post , @PathVariable long id){
-        for (Post oldPost: userServices.getPostList()) {
-            if (Objects.equals(oldPost.getId(), id)){
+    public void updatePost(@RequestBody Post post, @PathVariable long id) {
+        for (Post oldPost : userServices.getPostList()) {
+            if (Objects.equals(oldPost.getId(), id)) {
                 System.out.println(oldPost);
                 post.setId(id);
                 oldPost.setContent(post.getContent());
@@ -52,14 +54,13 @@ public class PostsController {
         }
     }
 
-    @DeleteMapping("{id}")
-    public void deletePost(@PathVariable long id){
-        Post postToRemove = null;
-        for (Post postToDelete: getAll()) {
-            if (Objects.equals(postToDelete.getId(),id))
-                postToDelete = postToRemove;
-                System.out.println(postToDelete+" will be deleted");
+    @PostMapping("{username}")
+    public void createByUsername(@PathVariable String username, @RequestBody Post newPost) {
+        userServices.addPost(newPost, username);
+    }
 
-        }
+    @DeleteMapping("{id}")
+    public void deletePost(@PathVariable long id) {
+        userServices.deletePostById(id);
     }
 }

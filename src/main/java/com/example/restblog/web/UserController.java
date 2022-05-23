@@ -1,4 +1,5 @@
 package com.example.restblog.web;
+import com.example.restblog.data.Post;
 import com.example.restblog.data.User;
 import com.example.restblog.services.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/username")
+    @GetMapping("username")
     public User getByUsername(@RequestParam String username){
         for (User user: userServices.getUserList()) {
             if (Objects.equals(user.getUsername(), username)){
@@ -44,7 +45,8 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/email")
+
+    @GetMapping("email")
     public User getByEmail(@RequestParam String email){
         for (User user: userServices.getUserList()) {
             if (Objects.equals(user.getEmail(), email)){
@@ -52,6 +54,12 @@ public class UserController {
             }
         }
         return null;
+    }
+
+    @PostMapping("newPost/{username}")
+    public void addUserPost(@PathVariable String username, @RequestBody Post newPost){
+        User user = userServices.getByUsername(username);
+        user.getPosts().add(newPost);
     }
 
     @PostMapping

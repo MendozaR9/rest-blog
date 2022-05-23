@@ -3,6 +3,7 @@ package com.example.restblog.data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,7 +16,7 @@ public class User {
     private Role role = Role.USER;
 
     @JsonIgnoreProperties("user")
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
 
     public enum Role{USER, ADMIN}
 

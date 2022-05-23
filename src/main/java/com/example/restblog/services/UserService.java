@@ -4,14 +4,15 @@ import com.example.restblog.data.Post;
 import com.example.restblog.data.User;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 @Service
 public class UserService {
   private   List<User> userList = setUserList();
   private   List<Post> posts = setPostList();
-
     public List<User> getUserList(){
         return userList;
     }
@@ -20,14 +21,17 @@ public class UserService {
         return posts;
     }
 
-    public  void  addPost(Post newPost, String username){
+    public void addPost(Post newPost, String username){
 
+        // get the User object who made the post
         User user = getByUsername(username);
 
+        // associate the post with the user object
         user.getPosts().add(newPost);
-
+        // associate the *user* with the post object
         newPost.setUser(user);
 
+        // add the post to the post list (our pretend database)
         posts.add(newPost);
     }
 
@@ -47,6 +51,15 @@ public class UserService {
             }
         }
         return null;
+    }
+
+    public void  deletePostById(long id){
+        for (Post post: posts){
+            if (post.getId() == id ){
+                posts.remove(post);
+                return;
+            }
+        }
     }
 
     private List<User> setUserList(){
