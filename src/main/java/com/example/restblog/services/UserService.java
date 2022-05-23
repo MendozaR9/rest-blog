@@ -1,24 +1,32 @@
 package com.example.restblog.services;
 
 import com.example.restblog.data.Post;
+import com.example.restblog.data.PostsRepository;
 import com.example.restblog.data.User;
+import com.example.restblog.data.UsersRepository;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 @Service
 public class UserService {
-  private   List<User> userList = setUserList();
-  private   List<Post> posts = setPostList();
-    public List<User> getUserList(){
-        return userList;
+
+//  private   List<User> userList = setUserList();
+//  private   List<Post> posts = setPostList();
+    private final UsersRepository usersRepository;
+  private final PostsRepository postsRepository;
+
+    public UserService(UsersRepository userRepository, PostsRepository postsRepository ){
+        this.usersRepository = userRepository;
+        this.postsRepository = postsRepository;
+    }
+
+    public List<User> getAllUsers(){
+        return usersRepository.findAll();
     }
 
     public List<Post>getPostList(){
-        return posts;
+        return postsRepository.findAll();
     }
 
     public void addPost(Post newPost, String username){
@@ -32,48 +40,33 @@ public class UserService {
         newPost.setUser(user);
 
         // add the post to the post list (our pretend database)
-        posts.add(newPost);
+        postsRepository.save(newPost);
     }
 
     public User getByUserId(long id){
-        for (User user: userList) {
-            if (Objects.equals(user.getId(), id)){
-                return user;
-            }
-        }
-        return null;
+       return usersRepository.findById(id).orElseThrow();
     }
 
     public User getByUsername(String username){
-        for (User user: userList) {
-            if (Objects.equals(user.getUsername(), username)){
-                return user;
-            }
-        }
-        return null;
+      return usersRepository.findByUsername(username);
     }
 
     public void  deletePostById(long id){
-        for (Post post: posts){
-            if (post.getId() == id ){
-                posts.remove(post);
-                return;
-            }
-        }
+        postsRepository.deleteById(id);
     }
 
-    private List<User> setUserList(){
-       List<User> userList = new ArrayList<>();
-            userList.add(new User(1, "testUser", "user@gmail.com", "password"));
-            userList.add(new User(2, "Duck", "duckman@gmail.com", "DuckMan"));
-        return userList;
-    }
-
-    private List<Post> setPostList(){
-        List<Post> postList = new ArrayList<>();
-        User user = new User(1, "DUCK", "user@gmail.com", "password");
-        postList.add( new Post(1L, "Dog pics", " this is a picture of my dog", user));
-        postList.add(new Post(2L, "Dinner", "Dinner ", user));
-        return postList;
-    }
+//    private List<User> setUserList(){
+//       List<User> userList = new ArrayList<>();
+//            userList.add(new User(1, "testUser", "user@gmail.com", "password"));
+//            userList.add(new User(2, "Duck", "duckman@gmail.com", "DuckMan"));
+//        return userList;
+//    }
+//
+//    private List<Post> setPostList(){
+//        List<Post> postList = new ArrayList<>();
+//        User user = new User(1, "DUCK", "user@gmail.com", "password");
+//        postList.add( new Post(1L, "Dog pics", " this is a picture of my dog", user));
+//        postList.add(new Post(2L, "Dinner", "Dinner ", user));
+//        return postList;
+//    }
 }

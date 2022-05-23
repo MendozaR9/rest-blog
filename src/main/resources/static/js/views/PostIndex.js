@@ -83,7 +83,6 @@ function submitPost(){
                 postId = "";
                  requestMethod = "POST";
             })
-
     })
 
     }

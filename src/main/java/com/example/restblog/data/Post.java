@@ -2,11 +2,19 @@ package com.example.restblog.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="posts")
 public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private  String title;
     private String content;
-@JsonIgnoreProperties("posts")
+
+    @ManyToOne
+    @JsonIgnoreProperties("posts")
     private User user ;
 
     public Post(long id, String title, String content , User user) {

@@ -5,7 +5,6 @@ import com.example.restblog.services.UserService;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,12 +21,12 @@ public class UserController {
 
     @GetMapping
     public List<User> getAll(){
-        return userServices.getUserList();
+        return userServices.getAllUsers();
     }
 
     @GetMapping("{id}")
     public User getById(@PathVariable long id){
-        for (User user: userServices.getUserList()) {
+        for (User user: userServices.getAllUsers()) {
             if (Objects.equals(user.getId(), id)){
                 return user;
             }
@@ -37,7 +36,7 @@ public class UserController {
 
     @GetMapping("username")
     public User getByUsername(@RequestParam String username){
-        for (User user: userServices.getUserList()) {
+        for (User user: userServices.getAllUsers()) {
             if (Objects.equals(user.getUsername(), username)){
                 return user;
             }
@@ -48,7 +47,7 @@ public class UserController {
 
     @GetMapping("email")
     public User getByEmail(@RequestParam String email){
-        for (User user: userServices.getUserList()) {
+        for (User user: userServices.getAllUsers()) {
             if (Objects.equals(user.getEmail(), email)){
                 return user;
             }
@@ -64,13 +63,13 @@ public class UserController {
 
     @PostMapping
     public void create(@RequestBody User user){
-    userServices.getUserList().add(user);
+    userServices.getAllUsers().add(user);
     System.out.println(user);
     }
     
     @PutMapping("{id}")
     public void  update(@PathVariable long id,  @RequestBody User user){
-        for (User oldUser: userServices.getUserList()) {
+        for (User oldUser: userServices.getAllUsers()) {
             if (Objects.equals(oldUser.getId(), id)){
                 System.out.println(oldUser);
                 user.setId(id);
