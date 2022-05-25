@@ -1,11 +1,14 @@
 package com.example.restblog.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name="posts")
+@DynamicUpdate
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,8 +17,23 @@ public class Post {
     private String content;
 
     @ManyToOne
-    @JsonIgnoreProperties("posts")
+    @JsonIgnoreProperties({"posts", "password"})
     private User user ;
+
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.REFRESH},
+            targetEntity = Category.class
+    )
+    @JoinTable(
+            name = "post_id",
+            joinColumns = {@JoinColumn(name= "post_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name="category_id", nullable = false, updatable = false)},
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
+    )
+    @JsonIgnoreProperties("posts")
+    private Collection<Category> categories;
+
 
     public Post(long id, String title, String content , User user) {
         this.id = id;
@@ -60,13 +78,20 @@ public class Post {
         this.content = content;
     }
 
+    public Collection<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Collection<Category> categories) {
+        this.categories = categories;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", user=" + user +
                 '}';
     }
 }

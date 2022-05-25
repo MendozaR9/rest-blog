@@ -4,8 +4,6 @@ import com.example.restblog.data.Post;
 import com.example.restblog.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;;
 
@@ -42,16 +40,17 @@ public class PostsController {
     }
 
     @PutMapping("{id}")
-    public void updatePost(@RequestBody Post post, @PathVariable long id) {
-        for (Post oldPost : userServices.getPostList()) {
-            if (Objects.equals(oldPost.getId(), id)) {
-                System.out.println(oldPost);
-                post.setId(id);
-                oldPost.setContent(post.getContent());
-                oldPost.setTitle(post.getTitle());
-                System.out.println(post);
-            }
-        }
+    public void updatePost(@RequestBody Post updatePost, @PathVariable long id) {
+        userServices.updatePost(id, updatePost);
+//        for (Post oldPost : userServices.getPostList()) {
+//            if (Objects.equals(oldPost.getId(), id)) {
+//                System.out.println(oldPost);
+//                updatePost.setId(id);
+//                oldPost.setContent(updatePost.getContent());
+//                oldPost.setTitle(updatePost.getTitle());
+//                System.out.println(updatePost);
+//            }
+//        }
     }
 
     @PostMapping("{username}")
@@ -62,5 +61,10 @@ public class PostsController {
     @DeleteMapping("{id}")
     public void deletePost(@PathVariable long id) {
         userServices.deletePostById(id);
+    }
+
+    @GetMapping("search")
+    public List<Post> searchPosts(@RequestParam String keyword) {
+        return userServices.getPostsByTitleKeyword(keyword);
     }
 }

@@ -1,11 +1,9 @@
 package com.example.restblog.services;
 
-import com.example.restblog.data.Post;
-import com.example.restblog.data.PostsRepository;
-import com.example.restblog.data.User;
-import com.example.restblog.data.UsersRepository;
+import com.example.restblog.data.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 @Service
@@ -15,10 +13,12 @@ public class UserService {
 //  private   List<Post> posts = setPostList();
     private final UsersRepository usersRepository;
   private final PostsRepository postsRepository;
+  private final CategoriesRepository categoriesRepository;
 
-    public UserService(UsersRepository userRepository, PostsRepository postsRepository ){
+    public UserService(UsersRepository userRepository, PostsRepository postsRepository, CategoriesRepository categoriesRepository ){
         this.usersRepository = userRepository;
         this.postsRepository = postsRepository;
+        this.categoriesRepository = categoriesRepository;
     }
 
     public List<User> getAllUsers(){
@@ -39,6 +39,14 @@ public class UserService {
         // associate the *user* with the post object
         newPost.setUser(user);
 
+        List<Category> categoriesToAdd = new ArrayList<>();
+
+        for (Category category : newPost.getCategories()) {
+            categoriesToAdd.add(categoriesRepository.findCategoryByName(category.getName()));
+        }
+
+        newPost.setCategories(categoriesToAdd);
+
         // add the post to the post list (our pretend database)
         postsRepository.save(newPost);
     }
@@ -51,10 +59,33 @@ public class UserService {
       return usersRepository.findByUsername(username);
     }
 
+    public void updatePost(long postId, Post post){
+        Post postToUpdate = postsRepository.findById(postId).orElseThrow();
+
+        if (post.getContent() != null  && !post.getContent().isEmpty()){
+            postToUpdate.setContent(post.getContent());
+        }
+        if (post.getTitle() != null && !post.getTitle().isEmpty()){
+            postToUpdate.setTitle(post.getTitle());
+        }
+
+        postsRepository.save(postToUpdate);
+    }
+
+
+
+    public User getByEmail(String email){
+        return usersRepository.findByEmail(email);
+    }
+
     public void  deletePostById(long id){
         postsRepository.deleteById(id);
     }
 
+
+    public List<Post> getPostsByTitleKeyword(String keyword) {
+        return postsRepository.searchByTitleLike(keyword);
+    }
 //    private List<User> setUserList(){
 //       List<User> userList = new ArrayList<>();
 //            userList.add(new User(1, "testUser", "user@gmail.com", "password"));
