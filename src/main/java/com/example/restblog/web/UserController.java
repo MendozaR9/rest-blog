@@ -2,6 +2,7 @@ package com.example.restblog.web;
 import com.example.restblog.data.Post;
 import com.example.restblog.data.User;
 import com.example.restblog.services.UserService;
+import com.example.restblog.web.dto.UpdateUserDto;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -68,16 +69,19 @@ public class UserController {
     }
     
     @PutMapping("{id}")
-    public void  update(@PathVariable long id,  @RequestBody User user){
-        for (User oldUser: userServices.getAllUsers()) {
-            if (Objects.equals(oldUser.getId(), id)){
-                System.out.println(oldUser);
-                user.setId(id);
-                oldUser.setUsername(user.getUsername());
-                oldUser.setEmail(user.getEmail());
-                System.out.println(user);
-            }
-        }
+    public void  update(@PathVariable long id, @RequestBody UpdateUserDto updateUserDto){
+//        for (User oldUser: userServices.getAllUsers()) {
+//            if (Objects.equals(oldUser.getId(), id)){
+//                System.out.println(oldUser);
+//                user.setId(id);
+//                oldUser.setUsername(user.getUsername());
+//                oldUser.setEmail(user.getEmail());
+//                System.out.println(user);
+//            }
+//        }
+        userServices.updateUser(updateUserDto);
+        System.out.println(updateUserDto);
+
     }
 
     @PutMapping("{id}/updatePassword")
