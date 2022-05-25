@@ -7,6 +7,7 @@ let postId = "";
      password: "password"
  }
 export default function PostIndex(props) {
+    console.log(props)
     //language=HTML
     return `
       <header>
@@ -19,7 +20,8 @@ export default function PostIndex(props) {
         `<div class="post-container" id = "post-${post.id}">
                   <h3 id="title-${post.id}">${post.title}</h3>
                   <p id="content-${post.id}">${post.content}</p>
-                  <p class="post-author">${post.user.username}</p>
+                  <p class="post-author">by: ${post.user.username}</p>
+                  <button disabled>${post.categories[0].name}</button><br>
                   <button type="submit" class="btn btn-primary edit-button" data-id="${post.id}">Edit</button>
                   <button type="submit" class="btn btn-danger delete-button" data-id="${post.id}">Delete</button>
               </div>
@@ -42,6 +44,7 @@ export default function PostIndex(props) {
       </main>
     `;
 }
+
 // PostsEvent();
 export function PostsEvent() {
 submitPost();
