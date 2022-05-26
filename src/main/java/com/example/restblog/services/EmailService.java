@@ -1,5 +1,6 @@
-package com.example.restblog.data;
+package com.example.restblog.services;
 
+import com.example.restblog.data.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;

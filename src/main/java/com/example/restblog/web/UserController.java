@@ -70,15 +70,6 @@ public class UserController {
     
     @PutMapping("{id}")
     public void  update(@PathVariable long id, @RequestBody UpdateUserDto updateUserDto){
-//        for (User oldUser: userServices.getAllUsers()) {
-//            if (Objects.equals(oldUser.getId(), id)){
-//                System.out.println(oldUser);
-//                user.setId(id);
-//                oldUser.setUsername(user.getUsername());
-//                oldUser.setEmail(user.getEmail());
-//                System.out.println(user);
-//            }
-//        }
         userServices.updateUser(updateUserDto);
         System.out.println(updateUserDto);
 
@@ -90,7 +81,6 @@ public class UserController {
             userToUpdate.setPassword(newPassword);
         System.out.println(userToUpdate.getPassword());
     }
-
 
     @DeleteMapping("{id}")
     public void deleteUser(@PathVariable long id){
