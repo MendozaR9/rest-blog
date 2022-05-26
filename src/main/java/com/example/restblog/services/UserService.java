@@ -1,18 +1,16 @@
 package com.example.restblog.services;
 
 import com.example.restblog.data.*;
-import com.example.restblog.web.dto.CreatePostDto;
+
 import com.example.restblog.web.dto.UpdateUserDto;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 @Service
 public class UserService {
 
-//  private   List<User> userList = setUserList();
-//  private   List<Post> posts = setPostList();
+
     private final UsersRepository usersRepository;
 
 
@@ -50,6 +48,10 @@ public class UserService {
         return usersRepository.findByEmail(email);
     }
 
-
+public void updateEmail(Long userId, String newEmail){
+        User user = getByUserId(userId);
+        user.setEmail(newEmail);
+        usersRepository.save(user);
+}
 
 }

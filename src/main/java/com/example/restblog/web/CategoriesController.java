@@ -1,8 +1,11 @@
 package com.example.restblog.web;
 
+import com.example.restblog.data.CategoriesRepository;
 import com.example.restblog.data.Category;
 
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @CrossOrigin
@@ -10,10 +13,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/categories", headers = "Accept=application/json")
 public class CategoriesController {
 
-    @GetMapping
-    public Category getPostByCategory(@RequestParam String categoryName){
+    private final CategoriesRepository categoriesRepository;
 
-        return null;
+    public CategoriesController(CategoriesRepository categoriesRepository) {
+        this.categoriesRepository = categoriesRepository;
+    }
+
+    @GetMapping
+    public List<Category> getAllCategory(){
+        return categoriesRepository.findAll();
+    }
+
+
+    @GetMapping("name")
+    public Category getPostByCategory(@RequestParam String categoryName){
+     return    categoriesRepository.findCategoryByName(categoryName);
     }
 
 }

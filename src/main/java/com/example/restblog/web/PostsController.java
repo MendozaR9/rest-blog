@@ -3,7 +3,7 @@ package com.example.restblog.web;
 import com.example.restblog.services.EmailService;
 import com.example.restblog.data.Post;
 import com.example.restblog.services.PostService;
-import com.example.restblog.services.UserService;
+
 import com.example.restblog.web.dto.CreatePostDto;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,15 +50,6 @@ public class PostsController {
     @PutMapping("{id}")
     public void updatePost(@RequestBody Post updatePost, @PathVariable long id) {
         postService.updatePost(id, updatePost);
-//        for (Post oldPost : userServices.getPostList()) {
-//            if (Objects.equals(oldPost.getId(), id)) {
-//                System.out.println(oldPost);
-//                updatePost.setId(id);
-//                oldPost.setContent(updatePost.getContent());
-//                oldPost.setTitle(updatePost.getTitle());
-//                System.out.println(updatePost);
-//            }
-//        }
     }
 
     @PostMapping("{username}")

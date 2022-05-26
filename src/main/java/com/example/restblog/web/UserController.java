@@ -87,4 +87,9 @@ public class UserController {
         System.out.println("Deleting the  user with the id of "+ id);
     }
 
+
+    @PatchMapping("{userId}")
+    public void updateEmail(@PathVariable Long userId, @RequestParam String newEmail){
+        userServices.updateEmail(userId,newEmail);
+    }
 }
