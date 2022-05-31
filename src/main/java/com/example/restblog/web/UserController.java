@@ -3,6 +3,7 @@ import com.example.restblog.data.Post;
 import com.example.restblog.data.User;
 import com.example.restblog.services.UserService;
 import com.example.restblog.web.dto.UpdateUserDto;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
@@ -14,9 +15,11 @@ import java.util.Objects;
 @RequestMapping(value = "/api/users", headers = "Accept=application/json")
 public class UserController {
     private final UserService userServices;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userServices) {
+    public UserController(UserService userServices, PasswordEncoder passwordEncoder) {
         this.userServices = userServices;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -62,10 +65,10 @@ public class UserController {
         user.getPosts().add(newPost);
     }
 
-    @PostMapping
-    public void create(@RequestBody User user){
-    userServices.getAllUsers().add(user);
-    System.out.println(user);
+    @PostMapping("create")
+    public void create(@RequestBody User newUser){
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        userServices.createUser(newUser);
     }
     
     @PutMapping("{id}")

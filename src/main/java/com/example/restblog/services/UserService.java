@@ -44,14 +44,17 @@ public class UserService {
         usersRepository.save(user);
 }
 
-    public User getByEmail(String email){
-        return usersRepository.findByEmail(email);
-    }
-
 public void updateEmail(Long userId, String newEmail){
         User user = getByUserId(userId);
         user.setEmail(newEmail);
         usersRepository.save(user);
 }
+
+
+    public void createUser(User user){
+        usersRepository.save(user);
+    }
+
+
 
 }
